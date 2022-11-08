@@ -11,8 +11,8 @@ router.post('/', async (req, res, next) => {
     // Security
     // TODO: Here you should probably verify basic auth
     // TODO: Here you should probably verify that the req was sent from trusted IPs
+    const { type, companyId, data = {} } = req.body;
 
-    const { type, companyId, data } = req.body;
     console.log('Hook of type ' + type + ' for companyId ' + companyId + ', the document with id ' + data.id + ' is in status ' + data.status);
 
     return res.sendStatus(204); // We must OK the webhook so it will not be sent again
@@ -34,6 +34,7 @@ router.get('/setup', async (req, res, next) => {
       type: 'document.accepted', // The type of event, example document.created or document.accepted
       isActive: true,
       url: config.publicUrl + '/webhook', // Url to sent POST to
+      includePaths: ['id', 'status', 'companyId', 'data.name'],
       authType: 'basicauth',
       authData: {
         username: 'test',
