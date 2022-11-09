@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Cling from '@cling-se/widget'
 
 function App() {
@@ -33,28 +33,28 @@ function App() {
     Cling?.openModal()
   }
 
-  let doc
+  const [doc, setDoc] = useState(null);
 
   const getDoc = async () => {
     const id = '636b4befc434aa77b09349b3' // document bound to widget-demo@cling.se
     console.log('Fetching doc: ', id)
 
     // Retrieve a document
-    doc = await Cling.document.get(id)
+    const res = await Cling.document.get(id);
 
+    console.log(res);
+    
     // Access its properties through the document class
-    const name = doc.getProperty('data.name')
-    const status = doc.getProperty('status')
-
+    const name = res.getProperty('data.name')
+    const status = res.getProperty('status')
+    
     console.log('Doc name: ', name)
     console.log('Doc status: ', status)
+
+    setDoc(res)
   }
 
   const updateDoc = async () => {
-    if (!doc) {
-      console.log('no existing doc')
-      return
-    }
     
     const name = document.getElementById('doc-name')?.value
     
@@ -78,18 +78,26 @@ function App() {
   // ...
 
   return (
-    <div>
-      <div>
-        <input type="file" onChange={onUpload} />
-        <div className="flex flex-col justify-center items-center">
-          <b>Fetch doc</b>
-          <button className="bg-gray-800 text-white p-2 rounded" onClick={getDoc}>Get doc</button>
-          <div className="py-5"/>
-          <b>Update doc</b>
-          <input className="border" id="doc-name" placeholder="Document name"/>
-          <button className="bg-gray-800 text-white p-2 rounded" onClick={updateDoc}>Update</button>
-        </div>
-      </div>
+    <div className="flex flex-col justify-center items-center pt-10">
+      <label className="bg-gray-800 text-white p-2 rounded mb-4">
+        Upload PDF
+        <input type="file" className="invisible h-0 w-0" onChange={onUpload} />
+      </label>
+      {
+        !doc ? (
+          <button
+            className="bg-gray-800 text-white p-2 rounded mb-4"
+            onClick={getDoc}
+          >
+            Get a document
+          </button>
+        )
+        : (
+          <div>
+            <input type="text" className="border" id="doc-name" placeholder="Document name"/>
+            <button type="text" className="bg-gray-800 text-white p-2 rounded" onClick={updateDoc}>Update</button>
+          </div>)
+      }
     </div>
   )
 }
