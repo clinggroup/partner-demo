@@ -1,7 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@cling-se/widget': ^0.0.14
+  '@cling-se/widget': ^0.0.15
   '@types/react': ^18.0.24
   '@types/react-dom': ^18.0.8
   '@vitejs/plugin-react': ^2.2.0
@@ -13,7 +13,7 @@ specifiers:
   vite: ^3.2.3
 
 dependencies:
-  '@cling-se/widget': 0.0.14
+  '@cling-se/widget': 0.0.15
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
 
@@ -298,8 +298,8 @@ packages:
       '@babel/helper-validator-identifier': 7.19.1
       to-fast-properties: 2.0.0
 
-  /@cling-se/widget/0.0.14:
-    resolution: {integrity: sha512-U68vQ5JTzVrv0ldMeRdGcQvyPoJwmg9DvqWiOtPweF/dzNTblK/f9GMuTxeoyE3WpDKMpWpXrQwjFl9uB1kEVA==}
+  /@cling-se/widget/0.0.15:
+    resolution: {integrity: sha512-hzhO826Uc61BBs26mF+7QGyvaWJf37+pr5QgN6id3Hqygg2YBxKx3rkJrHyD3Y2Ft571mrs+nbtb9vOU1H0hgQ==}
     dependencies:
       axios: 0.21.1
       date-fns: 2.14.0
