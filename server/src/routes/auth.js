@@ -25,14 +25,14 @@ router.get('/', async (req, res, next) => {
     };
 
     // Send signup or login with a specific user to Cling
-    const { data } = await axios.post(config.clingApiUrl + '/partner/auth', body, {
+    const { data } = await axios.post(config.clingApiUrl + '/partner/authCompanyUser', body, {
       headers: {
         Authorization: config.authorization,
       },
     });
 
     // Return the secret to the client
-    return res.json({ secret: data.secret });
+    return res.json({ authToken: data.authToken });
   } catch (err) {
     return next(err);
   }
