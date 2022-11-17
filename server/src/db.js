@@ -1,26 +1,26 @@
 const userDb = {
-  1: {
+  'u1': {
     name: 'Sven',
     email: 'sven@cling.se',
-    companyId: 1,
+    companyId: 'c1',
   },
-  2: {
+  'u2': {
     name: 'Peter Petersson',
     email: 'peter@cling.se',
-    companyId: 2,
+    companyId: 'c2',
   },
-  3: {
+  'u3': {
     name: 'Pontus Pontusson',
     email: 'pontus@cling.se',
-    companyId: 2,
+    companyId: 'c2',
   },
 };
 
 const companyDb = {
-  1: {
+  'c1': {
     name: 'Svea Aktiebolag'
   },
-  2: {
+  'c2': {
     name: 'P&P Konsulting AB'
   },
 };

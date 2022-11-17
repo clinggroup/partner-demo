@@ -20,10 +20,17 @@ router.get('/', async (req, res, next) => {
     if (!userData) throw new Error('Could not find companyData');
 
     const body = {
-      companyUser: userData,
-      company: companyData,
+      companyUser: {
+        id: userId,
+        email: userData.email,
+      },
+      company: {
+        id: userData.companyId,
+        name: companyData.name,
+      }
     };
 
+    console.log('Will now send body:', body);
     // Send signup or login with a specific user to Cling
     const { data } = await axios.post(config.clingApiUrl + '/partner/authCompanyUser', body, {
       headers: {
