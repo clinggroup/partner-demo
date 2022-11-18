@@ -1,7 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@cling-se/widget': ^0.0.15
+  '@cling-se/widget': ^0.1.0
   '@types/react': ^18.0.24
   '@types/react-dom': ^18.0.8
   '@vitejs/plugin-react': ^2.2.0
@@ -13,7 +13,7 @@ specifiers:
   vite: ^3.2.3
 
 dependencies:
-  '@cling-se/widget': 0.0.15
+  '@cling-se/widget': 0.1.0
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
 
@@ -298,14 +298,13 @@ packages:
       '@babel/helper-validator-identifier': 7.19.1
       to-fast-properties: 2.0.0
 
-  /@cling-se/widget/0.0.15:
-    resolution: {integrity: sha512-hzhO826Uc61BBs26mF+7QGyvaWJf37+pr5QgN6id3Hqygg2YBxKx3rkJrHyD3Y2Ft571mrs+nbtb9vOU1H0hgQ==}
+  /@cling-se/widget/0.1.0:
+    resolution: {integrity: sha512-Uz/NVpEtI1vZGgXcBGeKBvzx7SYlgj1S1nbETpAuEn5SUEpscwuBl1B+Qn1JIbSCe3iCgttQzEpxfA4ZRIiGAQ==}
     dependencies:
       axios: 0.21.1
       date-fns: 2.14.0
       deepmerge: 4.2.2
       dinero.js: 1.9.1
-      flag-icon-css: 3.5.0
       i18next: 19.4.4
       i18next-browser-languagedetector: 4.2.0
       json-logic-js: 2.0.2
@@ -938,11 +937,6 @@ packages:
     dependencies:
       to-regex-range: 5.0.1
     dev: true
-
-  /flag-icon-css/3.5.0:
-    resolution: {integrity: sha512-pgJnJLrtb0tcDgU1fzGaQXmR8h++nXvILJ+r5SmOXaaL/2pocunQo2a8TAXhjQnBpRLPtZ1KCz/TYpqeNuE2ew==}
-    deprecated: The project has been renamed to flag-icons
-    dev: false
 
   /follow-redirects/1.15.2:
     resolution: {integrity: sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==}

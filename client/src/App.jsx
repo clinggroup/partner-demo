@@ -20,7 +20,7 @@ function App() {
     })
     
     let authToken
-    if (authToken) return
+    if (!authToken) return
 
     // Authenticate user with authToken
     Cling.auth({
