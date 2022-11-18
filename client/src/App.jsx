@@ -18,6 +18,15 @@ function App() {
       email: 'widget-demo@cling.se', // If you don't have an account, create one on https://app.dev.cling.se/register
       password: 'Widgettest123'
     })
+    
+    let authToken
+    if (authToken) return
+
+    // Authenticate user with authToken
+    Cling.auth({
+      method: 'authToken',
+      authToken: 'abc...'
+    })
   }, [])
 
   const onUpload = async (e) => {
@@ -27,10 +36,16 @@ function App() {
     const myDoc = await Cling.document.new()
     myDoc.addBlock().pdf(file)
 
-    // Cling open send doc form ui
-    // ! Note: temporary solution, api will change drastically
-    Cling?.router.push({ name: 'DocFormSend' })
-    Cling?.openModal()
+    // add answer section to doc (accept, deny buttons)
+    myDoc.addBlock().answer()
+
+    // Register event listener / callback
+    myDoc.on('save', (data) => {
+      console.log('Saved document with data: ', data)
+    })
+
+    // Open send form ui for document
+    myDoc.ui.send.open()
   }
 
   const [doc, setDoc] = useState(null);
@@ -40,6 +55,7 @@ function App() {
     console.log('Fetching doc: ', id)
 
     // Retrieve a document
+    // NOTE: get returns READONLY versions of documents
     const res = await Cling.document.get(id);
 
     console.log(res);
@@ -58,18 +74,21 @@ function App() {
     
     const name = document.getElementById('doc-name')?.value
     
-    if (!name) {
-      console.log('no name provided')
-      return
-    }
+    if (!name) throw new Error('no name provided')
+
+    // Clone doc into editable version since it's readonly at this stage
+    const editDoc = await doc.toForm()
+
     // Update property
-    doc.setProperty('data.name', name)
+    editDoc.setProperty('data.name', name)
     
-    console.log('Updating doc ', doc._document?.id)
-    console.log('With name: ', doc._document?._doc?.data?.name)
+    const _id = editDoc.getProperty('id')
+    const _name = editDoc.getProperty('data.name')
+    console.log('Updating doc ', _id)
+    console.log('With name: ', _name)
 
     // Update/save document
-    await doc.save()
+    await editDoc.save()
 
     console.log('done')
   }
