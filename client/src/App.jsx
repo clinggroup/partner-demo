@@ -37,25 +37,49 @@ function App() {
   }, [])
 
   const [loggedIn, setLoggedIn] = useState(false)
-  const onAuth = async () => {
+  const onAuth = async (type) => {
     // Before we can authenticate the user, we need to generate an auth code
     // In order to generate an auth code we need to
     // 1. Setup partner relations to Cling api
     // 2. Use secret to generate auth code on behalf of user
     // 3. pass auth code from server -> client
 
-    // Authenticate the user
-    const isLoggedIn = await Cling.auth({
-      // Authenticate the user with an authToken
-      //   method: 'authToken',
-      //   authToken: 'abc...'
+    let isLoggedIn = false
 
-      // Or... use Email and password to login
-      // If you don't have an account, create one on https://app.dev.cling.se/register
-      method: 'standard',
-      email: 'widget-demo@cling.se',
-      password: 'Widgettest123',
-    })
+    // Authenticate the user
+    if (type === 'email') {
+      isLoggedIn = await Cling.auth({
+        // If you don't have an account, create one on https://app.dev.cling.se/register
+        method: 'standard',
+        email: 'widget-demo@cling.se',
+        password: 'Widgettest123',
+      })
+    } else if (type === 'server') {
+      // Using the server example
+      const serverUrl = import.meta.env.VITE_APP_SERVER_URL || 'http://localhost:3001'
+      // Ask server to match existing or create a new user
+      const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          companyUser: {
+            id: 'uniqueUserId',
+            email: 'uniqueUserId@cling.se',
+          },
+          company: {
+            id: 'uniqueCompanyId',
+            name: 'uniqueCompanyId AB',
+          },
+         })
+      };
+      const response = await fetch(`${serverUrl}/auth`, requestOptions)
+      const { authToken } = await response.json()
+      // Use the authToken to authenticate as the user
+      isLoggedIn = await Cling.auth({
+        method: 'authToken',
+        authToken,
+      })
+    }
 
     setLoggedIn(isLoggedIn)
   }
@@ -146,9 +170,14 @@ function App() {
             {loggedIn ? (
               <div className="text-xl text-gray-500 py-3 px-4 bg-gray-100 rounded">✅ Logged in</div>
             ) : (
-              <button onClick={onAuth} className="btn">
-                Log in
-              </button>
+              <div>
+                <button onClick={() => onAuth('server')} className="btn">
+                  Log in with server
+                </button>
+                <button onClick={() => onAuth('email')} className="btn">
+                  Log in with email + password
+                </button>
+              </div>
             )}
           </div>
         </div>
