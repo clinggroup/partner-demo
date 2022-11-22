@@ -1,11 +1,43 @@
 import { useEffect, useState } from 'react'
 import Cling from '@cling-se/widget'
+import Navbar from './components/Navbar'
+
+const styleVariables = {
+  '--primary-font': '"Exo 2", sans-serif',
+  '--primary-color-50': '132deg 50% 94%',
+  '--primary-color-100': '133deg 60% 87%',
+  '--primary-color-200': '137deg 66% 71%',
+  '--primary-color-300': '140deg 75% 55%',
+  '--primary-color-400': '143deg 85% 39%',
+  '--primary-color-500': '146deg 100% 27%',
+  '--primary-color-600': '149deg 100% 21%',
+  '--primary-color-700': '152deg 100% 17%',
+  '--primary-color-800': '155deg 100% 11%',
+  '--primary-color-900': '159deg 100% 7%',
+  '--gray-color-50': '210deg 20% 98%',
+  '--gray-color-100': '220deg 14% 96%',
+  '--gray-color-200': '220deg 13% 92%',
+  '--gray-color-300': '216deg 12% 85%',
+  '--gray-color-400': '218deg 11% 65%',
+  '--gray-color-500': '220deg 9% 46%',
+  '--gray-color-600': '215deg 14% 34%',
+  '--gray-color-700': '217deg 19% 27%',
+  '--gray-color-800': '215deg 28% 17%',
+  '--gray-color-900': '221deg 39% 11%'
+}
 
 function App() {
   useEffect(() => {
     // Init the Cling instance
-    Cling.init()
+    Cling.init({
+      ui: {
+        vars: styleVariables
+      }
+    })
+  }, [])
 
+  const [loggedIn, setLoggedIn] = useState(false)
+  const onAuth = async () => {
     // Before we can authenticate the user, we need to generate an auth code
     // In order to generate an auth code we need to
     // 1. Setup partner relations to Cling api
@@ -13,111 +45,165 @@ function App() {
     // 3. pass auth code from server -> client
 
     // Authenticate the user
-    Cling.auth({
-      method: 'standard', // Use Email and password to login
-      email: 'widget-demo@cling.se', // If you don't have an account, create one on https://app.dev.cling.se/register
-      password: 'Widgettest123'
-    })
-    
-    let authToken
-    if (!authToken) return
+    const isLoggedIn = await Cling.auth({
+      // Authenticate the user with an authToken
+      //   method: 'authToken',
+      //   authToken: 'abc...'
 
-    // Authenticate user with authToken
-    Cling.auth({
-      method: 'authToken',
-      authToken: 'abc...'
+      // Or... use Email and password to login
+      // If you don't have an account, create one on https://app.dev.cling.se/register
+      method: 'standard',
+      email: 'widget-demo@cling.se',
+      password: 'Widgettest123',
     })
-  }, [])
+
+    setLoggedIn(isLoggedIn)
+  }
+
+  const [file, setFile] = useState(null)
+  const [doc, setDoc] = useState(null)
 
   const onUpload = async (e) => {
-    const file = e.target.files[0];
+    const inputFile = 'https://cling-staging-uploads.s3.eu-central-1.amazonaws.com/company/286/1669045349402_ENERGYSTAR1pdf' || e.target.files[0]
+    console.log(inputFile)
+    // setFile(inputFile)
 
-    // Prepare a document and attach the pdf to it
+    // Prepare the document form
     const myDoc = await Cling.document.new()
-    myDoc.addBlock().pdf(file)
 
-    // add answer section to doc (accept, deny buttons)
-    myDoc.addBlock().answer()
+    myDoc.addBlock().pdf(inputFile) // add pdf section
+    myDoc.addBlock().answer() // add answer section (accept, deny buttons)
 
     // Register event listener / callback
     myDoc.on('save', (data) => {
-      console.log('Saved document with data: ', data)
+      alert('Document has been saved.')
     })
 
+    setDoc(myDoc)
+  }
+
+  const openSendWindow = () => {
+    console.log(doc)
+
     // Open send form ui for document
-    myDoc.ui.send.open()
+    doc.ui.send.open()
   }
 
-  const [doc, setDoc] = useState(null);
+  // const getDocument = async () => {
+  //   const id = '636b4befc434aa77b09349b3' // document bound to widget-demo@cling.se
+  //   console.log('Fetching doc: ', id)
 
-  const getDoc = async () => {
-    const id = '636b4befc434aa77b09349b3' // document bound to widget-demo@cling.se
-    console.log('Fetching doc: ', id)
+  //   // Retrieve a document
+  //   // NOTE: get returns READONLY versions of documents
+  //   const res = await Cling.document.get(id)
 
-    // Retrieve a document
-    // NOTE: get returns READONLY versions of documents
-    const res = await Cling.document.get(id);
+  //   console.log(res)
 
-    console.log(res);
-    
-    // Access its properties through the document class
-    const name = res.getProperty('data.name')
-    const status = res.getProperty('status')
-    
-    console.log('Doc name: ', name)
-    console.log('Doc status: ', status)
+  //   // Access its properties through the document class
+  //   const name = res.getProperty('data.name')
+  //   const status = res.getProperty('status')
 
-    setDoc(res)
-  }
+  //   console.log('Doc name: ', name)
+  //   console.log('Doc status: ', status)
 
-  const updateDoc = async () => {
-    
-    const name = document.getElementById('doc-name')?.value
-    
-    if (!name) throw new Error('no name provided')
+  //   // setDoc(res)
+  // }
 
-    // Clone doc into editable version since it's readonly at this stage
-    const editDoc = await doc.toForm()
+  // const updateDoc = async () => {
+  //   const name = document.getElementById('doc-name')?.value
 
-    // Update property
-    editDoc.setProperty('data.name', name)
-    
-    const _id = editDoc.getProperty('id')
-    const _name = editDoc.getProperty('data.name')
-    console.log('Updating doc ', _id)
-    console.log('With name: ', _name)
+  //   if (!name) throw new Error('no name provided')
 
-    // Update/save document
-    await editDoc.save()
+  //   // Clone doc into editable version since it's readonly at this stage
+  //   const editDoc = await doc.toForm()
 
-    console.log('done')
-  }
+  //   // Update property
+  //   editDoc.setProperty('data.name', name)
+
+  //   const _id = editDoc.getProperty('id')
+  //   const _name = editDoc.getProperty('data.name')
+  //   console.log('Updating doc ', _id)
+  //   console.log('With name: ', _name)
+
+  //   // Update/save document
+  //   await editDoc.save()
+
+  //   console.log('done')
+  // }
 
   // Send a reminder
   // ...
 
   return (
-    <div className="flex flex-col justify-center items-center pt-10">
-      <label className="bg-gray-800 text-white p-2 rounded mb-4">
-        Upload PDF
-        <input type="file" className="invisible h-0 w-0" onChange={onUpload} />
-      </label>
-      {
-        !doc ? (
-          <button
-            className="bg-gray-800 text-white p-2 rounded mb-4"
-            onClick={getDoc}
-          >
-            Get a document
-          </button>
-        )
-        : (
-          <div>
-            <input type="text" className="border" id="doc-name" placeholder="Document name"/>
-            <button type="text" className="bg-gray-800 text-white p-2 rounded" onClick={updateDoc}>Update</button>
-          </div>)
-      }
+    <div className="flex flex-col min-h-screen bg-gray-200">
+      <Navbar />
+      <div className="flex-auto flex flex-col h-full py-12 px-8">
+        <div className="bg-white w-full p-10 rounded shadow-xl border border-gray-300 mb-8">
+          <div className="flex w-full">
+            <div className="flex-auto">
+              <div className="text-2xl font-semibold pb-4">🔑 Authenticate</div>
+            </div>
+            {loggedIn ? (
+              <div className="text-xl text-gray-500 py-3 px-4 bg-gray-100 rounded">✅ Logged in</div>
+            ) : (
+              <button onClick={onAuth} className="btn">
+                Log in
+              </button>
+            )}
+          </div>
+        </div>
+        <div className={loggedIn ? '' : 'pointer-events-none opacity-30'}>
+          <div className="bg-white w-full p-10 rounded shadow-xl border border-gray-300 mb-8">
+            <div className="flex w-full">
+              <div className="flex-auto">
+                <div className="text-2xl font-semibold pb-4">📬 Create & Send a Document</div>
+              </div>
+              <div className="flex flex-col items-end gap-4">
+                <label className="block">
+                  <input
+                    type="file"
+                    className="
+                      bg-gray-100
+                      border border-gray-300 rounded cursor-pointer
+                      text-lg text-grey-500
+                      file:mr-5 file:py-3 file:px-4 file:text-xl
+                      file:rounded-left file:border-0
+                      file:bg-primary-500 file:text-white
+                      hover:file:cursor-pointer
+                    "
+                    onChange={onUpload}
+                  />
+                </label>
+                <button onClick={openSendWindow} className="btn block">
+                  Open send window
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+    // <div className="flex flex-col justify-center items-center pt-10">
+    //   <label className="bg-gray-800 text-white p-2 rounded mb-4">
+    //     Upload PDF
+    //     <input type="file" className="invisible h-0 w-0" onChange={onUpload} />
+    //   </label>
+    //   {
+    //     !doc ? (
+    //       <button
+    //         className="bg-gray-800 text-white p-2 rounded mb-4"
+    //         onClick={getDoc}
+    //       >
+    //         Get a document
+    //       </button>
+    //     )
+    //     : (
+    //       <div>
+    //         <input type="text" className="border" id="doc-name" placeholder="Document name"/>
+    //         <button type="text" className="bg-gray-800 text-white p-2 rounded" onClick={updateDoc}>Update</button>
+    //       </div>)
+    //   }
+    // </div>
   )
 }
 
