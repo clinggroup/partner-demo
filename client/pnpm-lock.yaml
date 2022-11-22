@@ -1,7 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@cling-se/widget': ^0.1.0
+  '@cling-se/widget': ^0.2.0
   '@types/react': ^18.0.24
   '@types/react-dom': ^18.0.8
   '@vitejs/plugin-react': ^2.2.0
@@ -13,7 +13,7 @@ specifiers:
   vite: ^3.2.3
 
 dependencies:
-  '@cling-se/widget': 0.1.0
+  '@cling-se/widget': 0.2.0
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
 
@@ -298,8 +298,8 @@ packages:
       '@babel/helper-validator-identifier': 7.19.1
       to-fast-properties: 2.0.0
 
-  /@cling-se/widget/0.1.0:
-    resolution: {integrity: sha512-Uz/NVpEtI1vZGgXcBGeKBvzx7SYlgj1S1nbETpAuEn5SUEpscwuBl1B+Qn1JIbSCe3iCgttQzEpxfA4ZRIiGAQ==}
+  /@cling-se/widget/0.2.0:
+    resolution: {integrity: sha512-czTCezSvfidPuvpsGE/xgJx1Ut3dc3+t4Fqqom/ofDOSOj6acqbqBedg/TEpUHB6OAKtkLqRfjMn69N49KvMmg==}
     dependencies:
       axios: 0.21.1
       date-fns: 2.14.0
@@ -311,7 +311,6 @@ packages:
       liquidjs: 9.41.0
       lodash: 4.17.14
       normalizr: 3.6.2
-      pikaday: 1.8.0
       simplebar: 5.2.0
       simplebar-vue: 1.5.0_vue@2.7.13
       socket.io-client: 4.5.3
@@ -326,7 +325,6 @@ packages:
       vuelidate-error-extractor: 2.4.1_vue@2.7.13+vuelidate@0.7.4
       vuex: 3.4.0_vue@2.7.13
       vuex-map-fields: 1.4.1
-      vuex-persistedstate: 3.1.0_vue@2.7.13+vuex@3.4.0
       vuex-router-sync: 5.0.0_fahxyhdgf6wta2uz2eycxcowke
     transitivePeerDependencies:
       - bufferutil
@@ -1172,10 +1170,6 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /pikaday/1.8.0:
-    resolution: {integrity: sha512-SgGxMYX0NHj9oQnMaSyAipr2gOrbB4Lfs/TJTb6H6hRHs39/5c5VZi73Q8hr53+vWjdn6HzkWcj8Vtl3c9ziaA==}
-    dev: false
-
   /popper.js/1.16.1:
     resolution: {integrity: sha512-Wb4p1J4zyFTbM+u6WuO4XstYx4Ky9Cewe4DWrel7B0w6VVICvPwdOpotjzcf6eD8TsckVnIMNONQyPIUFOUbCQ==}
     deprecated: You can find the new Popper v2 at @popperjs/core, this package is dedicated to the legacy v1
@@ -1340,11 +1334,6 @@ packages:
     resolution: {integrity: sha512-b39TBaTSfV6yBrapU89p5fKekE2m/NwnDocOVruQFS1/veMgdzuPcnOM34M6CwxW8jH/lxEa5rBoDeUwu5HHTw==}
     hasBin: true
     dev: true
-
-  /shvl/2.0.3:
-    resolution: {integrity: sha512-V7C6S9Hlol6SzOJPnQ7qzOVEWUQImt3BNmmzh40wObhla3XOYMe4gGiYzLrJd5TFa+cI2f9LKIRJTTKZSTbWgw==}
-    deprecated: older versions vulnerable to prototype pollution
-    dev: false
 
   /simplebar-vue/1.5.0_vue@2.7.13:
     resolution: {integrity: sha512-z5/p9CKsVVsnYPVbfpgHOFvoGcb/j/1V/FoGFy3SW2UhbUAQu84YHc23FB4xVl78zDX5upMW5Aspd8abWLfgkA==}
@@ -1586,19 +1575,6 @@ packages:
 
   /vuex-map-fields/1.4.1:
     resolution: {integrity: sha512-jvIcpvoIPqwvJCOfRkPU9Rj0EbjWuk7GlNC5LXU9mCXVGZph6bWGHZssnoUzpLMxJtXQEHoVyZkKf7YQV+/bnQ==}
-    dev: false
-
-  /vuex-persistedstate/3.1.0_vue@2.7.13+vuex@3.4.0:
-    resolution: {integrity: sha512-nRiCe1qDdDrcveFQzTw0QGEj3dRpwN19BailSSwfhe4eUNNQ+9S/ApKnDEAuyw95cigOtSPciMEhdsC0qNUiKQ==}
-    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
-    peerDependencies:
-      vue: ^2.0.0
-      vuex: ^2.0.0 || ^3.0.0
-    dependencies:
-      deepmerge: 4.2.2
-      shvl: 2.0.3
-      vue: 2.7.13
-      vuex: 3.4.0_vue@2.7.13
     dev: false
 
   /vuex-router-sync/5.0.0_fahxyhdgf6wta2uz2eycxcowke:
