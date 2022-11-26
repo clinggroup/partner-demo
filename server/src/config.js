@@ -3,7 +3,7 @@ require('dotenv').config();
 const config = {
   port: process.env.PORT || 3001, // Port to start server
   clingApiUrl: process.env.CLING_API_URL || 'https://api.dev.cling.se', // Url to Cling API
-  publicUrl: process.env.PUBLIC_URL, // Url to this server (used for incoming webhooks, please also forward port if needed)
+  publicUrl: process.env.PUBLIC_URL || 'http://localhost:3001', // Url to this server (used for incoming webhooks, please also forward port if needed)
   authorization: process.env.AUTHORIZATION, // JWT used to authenticate as a partner to Cling
 }
 

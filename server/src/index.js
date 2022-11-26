@@ -9,6 +9,7 @@ app.use(cors())
 app.use(express.json({ limit: '10mb' }));
 
 // Register routes
+app.get("/", (req, res) => { res.send("Hello world") });
 app.use('/auth', authRoutes);
 app.use('/webhook', webhooksRoutes);
 
