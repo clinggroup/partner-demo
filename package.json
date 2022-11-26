@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.1",
   "scripts": {
-    "dev": "pnpm client:dev & pnpm server:dev",
+    "dev": "pnpm client:dev & pnpm server:dev --stream",
     "client:dev": "pnpm --filter='./client' dev",
     "server:dev": "pnpm --filter='./server' dev"
   },
