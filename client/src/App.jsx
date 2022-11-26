@@ -1,82 +1,66 @@
-import { useEffect, useState } from 'react'
-import Cling from '@cling-se/widget'
-import Navbar from './components/Navbar'
+import { useEffect, useState, useRef } from 'react'
+import { Cling, config } from './Cling'
+import Navbar from './components/ui/Navbar'
+import Container from './components/ui/Container'
+import Row from './components/ui/Row'
 
-const styleVariables = {
-  '--primary-font': '"Exo 2", sans-serif',
-  '--primary-color-50': '132deg 50% 94%',
-  '--primary-color-100': '133deg 60% 87%',
-  '--primary-color-200': '137deg 66% 71%',
-  '--primary-color-300': '140deg 75% 55%',
-  '--primary-color-400': '143deg 85% 39%',
-  '--primary-color-500': '146deg 100% 27%',
-  '--primary-color-600': '149deg 100% 21%',
-  '--primary-color-700': '152deg 100% 17%',
-  '--primary-color-800': '155deg 100% 11%',
-  '--primary-color-900': '159deg 100% 7%',
-  '--gray-color-50': '210deg 20% 98%',
-  '--gray-color-100': '220deg 14% 96%',
-  '--gray-color-200': '220deg 13% 92%',
-  '--gray-color-300': '216deg 12% 85%',
-  '--gray-color-400': '218deg 11% 65%',
-  '--gray-color-500': '220deg 9% 46%',
-  '--gray-color-600': '215deg 14% 34%',
-  '--gray-color-700': '217deg 19% 27%',
-  '--gray-color-800': '215deg 28% 17%',
-  '--gray-color-900': '221deg 39% 11%'
+const getAuthToken = async () => {
+  // In order to generate an auth code we need to:
+  // 1. Setup partner relations to the Cling API
+  // 2. Use a secret to generate an auth token on behalf of the user
+  // 3. pass the auth code from the server to the client
+
+  const serverUrl = import.meta.env.VITE_APP_SERVER_URL || 'http://localhost:3001'
+
+  // Ask server to match existing or create a new user
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      companyUser: {
+        id: 'uniqueUserId',
+        email: 'uniqueUserId@cling.se',
+      },
+      company: {
+        id: 'uniqueCompanyId',
+        name: 'uniqueCompanyId AB',
+      },
+    }),
+  }
+  const response = await fetch(`${serverUrl}/auth`, requestOptions)
+  const { authToken } = await response.json()
+
+  return authToken;
 }
 
 function App() {
   useEffect(() => {
     // Init the Cling instance
-    Cling.init({
-      ui: {
-        vars: styleVariables
-      }
-    })
+    Cling.init(config)
   }, [])
 
   const [loggedIn, setLoggedIn] = useState(false)
-  const onAuth = async (type) => {
-    // Before we can authenticate the user, we need to generate an auth code
-    // In order to generate an auth code we need to
-    // 1. Setup partner relations to Cling api
-    // 2. Use secret to generate auth code on behalf of user
-    // 3. pass auth code from server -> client
+  // If you don't have an account, create one on https://app.dev.cling.se/register
+  const [user, setUser] = useState({
+    email: 'widget-demo@cling.se',
+    password: 'Widgettest123',
+  })
 
+  const onAuth = async ({ method, email, password }) => {
     let isLoggedIn = false
 
     // Authenticate the user
-    if (type === 'email') {
+    if (method === 'standard') {
       isLoggedIn = await Cling.auth({
-        // If you don't have an account, create one on https://app.dev.cling.se/register
-        method: 'standard',
-        email: 'widget-demo@cling.se',
-        password: 'Widgettest123',
+        method,
+        email,
+        password,
       })
-    } else if (type === 'server') {
-      // Using the server example
-      const serverUrl = import.meta.env.VITE_APP_SERVER_URL || 'http://localhost:3001'
-      // Ask server to match existing or create a new user
-      const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          companyUser: {
-            id: 'uniqueUserId',
-            email: 'uniqueUserId@cling.se',
-          },
-          company: {
-            id: 'uniqueCompanyId',
-            name: 'uniqueCompanyId AB',
-          },
-         })
-      };
-      const response = await fetch(`${serverUrl}/auth`, requestOptions)
-      const { authToken } = await response.json()
+    } else if (method === 'authToken') {
+      const authToken = await getAuthToken()
       // Use the authToken to authenticate as the user
       isLoggedIn = await Cling.auth({
-        method: 'authToken',
+        method,
         authToken,
       })
     }
@@ -84,155 +68,153 @@ function App() {
     setLoggedIn(isLoggedIn)
   }
 
-  const [file, setFile] = useState(null)
+  // New document
   const [doc, setDoc] = useState(null)
-
   const onUpload = async (e) => {
-    const inputFile = 'https://cling-staging-uploads.s3.eu-central-1.amazonaws.com/company/286/1669045349402_ENERGYSTAR1pdf' || e.target.files[0]
-    console.log(inputFile)
-    // setFile(inputFile)
+    if (!e) return
 
-    // Prepare the document form
-    const myDoc = await Cling.document.new()
+    const pdfInput = typeof e === 'string' ? e : e.target.files[0]
+    const myDoc = await Cling.document.new() // Prepare the document form
 
-    myDoc.addBlock().pdf(inputFile) // add pdf section
+    myDoc.setProperty('data.name', 'My newly created document!') // Set the document name
+    myDoc.addBlock().pdf(pdfInput) // add pdf section
     myDoc.addBlock().answer() // add answer section (accept, deny buttons)
 
     // Register event listener / callback
     myDoc.on('save', (data) => {
-      alert('Document has been saved.')
+      console.log('Document has been saved.' + '\n' + 'id: ' + data.id)
     })
 
     setDoc(myDoc)
   }
 
-  const openSendWindow = () => {
-    console.log(doc)
+  // Retrieved document
+  const [fetchId, setFetchId] = useState('636b4befc434aa77b09349b3') // document bound to widget-demo@cling.se
+  const [fetchedDocument, setFetchedDocument] = useState()
+  const onGetDocument = async (id) => {
+    const res = await Cling.document.get(id) // Retrieve a document
 
-    // Open send form ui for document
-    doc.ui.send.open()
+    console.log(res)
+
+    setFetchedDocument(res)
   }
 
-  // const getDocument = async () => {
-  //   const id = '636b4befc434aa77b09349b3' // document bound to widget-demo@cling.se
-  //   console.log('Fetching doc: ', id)
-
-  //   // Retrieve a document
-  //   // NOTE: get returns READONLY versions of documents
-  //   const res = await Cling.document.get(id)
-
-  //   console.log(res)
-
-  //   // Access its properties through the document class
-  //   const name = res.getProperty('data.name')
-  //   const status = res.getProperty('status')
-
-  //   console.log('Doc name: ', name)
-  //   console.log('Doc status: ', status)
-
-  //   // setDoc(res)
-  // }
-
-  // const updateDoc = async () => {
-  //   const name = document.getElementById('doc-name')?.value
-
-  //   if (!name) throw new Error('no name provided')
-
-  //   // Clone doc into editable version since it's readonly at this stage
-  //   const editDoc = await doc.toForm()
-
-  //   // Update property
-  //   editDoc.setProperty('data.name', name)
-
-  //   const _id = editDoc.getProperty('id')
-  //   const _name = editDoc.getProperty('data.name')
-  //   console.log('Updating doc ', _id)
-  //   console.log('With name: ', _name)
-
-  //   // Update/save document
-  //   await editDoc.save()
-
-  //   console.log('done')
-  // }
-
-  // Send a reminder
-  // ...
+  const AuthText = () => (
+    <>
+      <div>Log in the user with a auth token. For testing purposes you can use email and password.</div>
+      <p>
+        If you don't have an account, create a free account on{' '}
+        <a className="text-primary-500 underline" href="https://app.dev.cling.se/register/" target="_blank">
+          app.dev.cling.se/register/
+        </a>
+      </p>
+    </>
+  )
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-200">
       <Navbar />
-      <div className="flex-auto flex flex-col h-full py-12 px-8">
-        <div className="bg-white w-full p-10 rounded shadow-xl border border-gray-300 mb-8">
-          <div className="flex w-full">
-            <div className="flex-auto">
-              <div className="text-2xl font-semibold pb-4">🔑 Authenticate</div>
-            </div>
+      <div className="flex-auto flex flex-col h-full pt-24 pb-10 px-8">
+        <Container title="🔑 Authenticate" text={<AuthText />}>
+          <Row title={'Log in'}>
             {loggedIn ? (
-              <div className="text-xl text-gray-500 py-3 px-4 bg-gray-100 rounded">✅ Logged in</div>
+              <div className="btn pointer-events-none">✅ Logged in</div>
             ) : (
-              <div>
-                <button onClick={() => onAuth('server')} className="btn">
-                  Log in with server
-                </button>
-                <button onClick={() => onAuth('email')} className="btn">
-                  Log in with email + password
-                </button>
+              <div className="flex flex-col items-end">
+                <div className="border-b mb-3 pb-3">
+                  <input type="text" className="input" placeholder="Email" value={user.email} onInput={(e) => setUser((prev) => ({ ...prev, email: e.target.value }))} />
+                  <input type="password" className="input ml-2" placeholder="Password" value={user.password} onInput={(e) => setUser((prev) => ({ ...prev, password: e.target.value }))} />
+                  <button
+                    onClick={() =>
+                      onAuth({
+                        method: 'standard',
+                        email: user.email,
+                        password: user.password,
+                      })
+                    }
+                    className="btn primary ml-2">
+                    Log in
+                  </button>
+                </div>
+                <div className="flex items-center text-gray-500">
+                  <div className="text-sm pr-2">Or sign in with an auth token </div>
+                  <button onClick={() => onAuth({ method: 'authToken' })} className="btn primary">
+                    Retrieve token
+                  </button>
+                </div>
               </div>
             )}
+          </Row>
+        </Container>
+
+        <Container disabled={!loggedIn} title="📬 Create a new document" text="Create a new document consiting of a PDF and a signature section.">
+          <Row title="Upload a PDF">
+            <label className="btn primary">
+              <input type="file" className="invisible h-0 w-0" onChange={onUpload} />
+              Upload file
+            </label>
+            <button
+              className="btn primary ml-2"
+              onClick={() => {
+                const url = window.prompt('Paste the URL to a PDF-file.', 'https://cling-staging-uploads.s3.eu-central-1.amazonaws.com/company/286/1669045349402_ENERGYSTAR1pdf')
+                onUpload(url)
+              }}>
+              Use URL
+            </button>
+          </Row>
+          <Row title="Save or send the document">
+            <button disabled={!doc} onClick={() => doc.ui.send.open()} className="btn primary">
+              Open
+            </button>
+          </Row>
+        </Container>
+
+        <Container disabled={!loggedIn} title={'🥅 Retrieve a document'} text={'Get a document that already exists.'}>
+          <Row title="Get a document">
+            <input type="text" className="input" placeholder="Document id" value={fetchId} onInput={(e) => setFetchId(e.target.value)} />
+            <button className="btn primary ml-2" onClick={() => onGetDocument(fetchId)}>
+              Get
+            </button>
+          </Row>
+          <Row title="Send a reminder">
+            <button className="btn primary" disabled={!fetchedDocument} onClick={() => fetchedDocument.ui.sendReminder.open()}>
+              Open
+            </button>
+          </Row>
+          <Row title="Change document name">
+            <button
+              className="btn primary"
+              disabled={!fetchedDocument}
+              onClick={async () => {
+                const editableDoc = await fetchedDocument.toForm()
+                const name = window.prompt('Change the document name.', editableDoc.getProperty('data.name'))
+                if (name === null) return;
+                editableDoc.setProperty('data.name', name)
+                await editableDoc.save()
+              }}>
+              Open
+            </button>
+          </Row>
+          <div className="opacity-20">
+            <Row title="Show events timeline">
+              <button className="btn primary" disabled={true} onClick={() => null}>
+                Open
+              </button>
+            </Row>
+            <Row title="Show document links">
+              <button className="btn primary" disabled={true} onClick={() => null}>
+                Open
+              </button>
+            </Row>
+            <Row title="Show signature reciepts">
+              <button className="btn primary" disabled={true} onClick={() => null}>
+                Open
+              </button>
+            </Row>
           </div>
-        </div>
-        <div className={loggedIn ? '' : 'pointer-events-none opacity-30'}>
-          <div className="bg-white w-full p-10 rounded shadow-xl border border-gray-300 mb-8">
-            <div className="flex w-full">
-              <div className="flex-auto">
-                <div className="text-2xl font-semibold pb-4">📬 Create & Send a Document</div>
-              </div>
-              <div className="flex flex-col items-end gap-4">
-                <label className="block">
-                  <input
-                    type="file"
-                    className="
-                      bg-gray-100
-                      border border-gray-300 rounded cursor-pointer
-                      text-lg text-grey-500
-                      file:mr-5 file:py-3 file:px-4 file:text-xl
-                      file:rounded-left file:border-0
-                      file:bg-primary-500 file:text-white
-                      hover:file:cursor-pointer
-                    "
-                    onChange={onUpload}
-                  />
-                </label>
-                <button onClick={openSendWindow} className="btn block">
-                  Open send window
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        </Container>
       </div>
     </div>
-    // <div className="flex flex-col justify-center items-center pt-10">
-    //   <label className="bg-gray-800 text-white p-2 rounded mb-4">
-    //     Upload PDF
-    //     <input type="file" className="invisible h-0 w-0" onChange={onUpload} />
-    //   </label>
-    //   {
-    //     !doc ? (
-    //       <button
-    //         className="bg-gray-800 text-white p-2 rounded mb-4"
-    //         onClick={getDoc}
-    //       >
-    //         Get a document
-    //       </button>
-    //     )
-    //     : (
-    //       <div>
-    //         <input type="text" className="border" id="doc-name" placeholder="Document name"/>
-    //         <button type="text" className="bg-gray-800 text-white p-2 rounded" onClick={updateDoc}>Update</button>
-    //       </div>)
-    //   }
-    // </div>
   )
 }
 

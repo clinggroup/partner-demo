@@ -1,7 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@cling-se/widget': ^0.2.0
+  '@cling-se/widget': ^0.3.1
   '@types/react': ^18.0.24
   '@types/react-dom': ^18.0.8
   '@vitejs/plugin-react': ^2.2.0
@@ -13,7 +13,7 @@ specifiers:
   vite: ^3.2.3
 
 dependencies:
-  '@cling-se/widget': 0.2.0
+  '@cling-se/widget': 0.3.1
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
 
@@ -298,8 +298,8 @@ packages:
       '@babel/helper-validator-identifier': 7.19.1
       to-fast-properties: 2.0.0
 
-  /@cling-se/widget/0.2.0:
-    resolution: {integrity: sha512-czTCezSvfidPuvpsGE/xgJx1Ut3dc3+t4Fqqom/ofDOSOj6acqbqBedg/TEpUHB6OAKtkLqRfjMn69N49KvMmg==}
+  /@cling-se/widget/0.3.1:
+    resolution: {integrity: sha512-ZPb7MHcxjBnd1CctqPOkGKYqs3TyMQg/9PvvYqUHh4y1qocSmK460n0XATkBfMEQk0zNiP5nbujCkWoJ/lIBjQ==}
     dependencies:
       axios: 0.21.1
       date-fns: 2.14.0
@@ -321,8 +321,8 @@ packages:
       vue-js-modal: 2.0.0-rc.3_vue@2.7.13
       vue-router: 3.0.1_vue@2.7.13
       vue-smooth-reflow: 0.1.12_vue@2.7.13
-      vuelidate: 0.7.4
-      vuelidate-error-extractor: 2.4.1_vue@2.7.13+vuelidate@0.7.4
+      vuelidate: 0.7.5
+      vuelidate-error-extractor: 2.4.1_vue@2.7.13+vuelidate@0.7.5
       vuex: 3.4.0_vue@2.7.13
       vuex-map-fields: 1.4.1
       vuex-router-sync: 5.0.0_fahxyhdgf6wta2uz2eycxcowke
@@ -1556,7 +1556,7 @@ packages:
       csstype: 3.1.1
     dev: false
 
-  /vuelidate-error-extractor/2.4.1_vue@2.7.13+vuelidate@0.7.4:
+  /vuelidate-error-extractor/2.4.1_vue@2.7.13+vuelidate@0.7.5:
     resolution: {integrity: sha512-lOWHn1FbrL4vSu/fiospWEZiAOegh+5lfdNl8Y1ulZnV1+TiGAEqvpbpHqSiIMfshFePYtYMbZHsIZLLF2O4Qg==}
     engines: {node: '>= 6.0'}
     peerDependencies:
@@ -1565,11 +1565,11 @@ packages:
     dependencies:
       '@d_hristov/get-value': 3.0.4
       vue: 2.7.13
-      vuelidate: 0.7.4
+      vuelidate: 0.7.5
     dev: false
 
-  /vuelidate/0.7.4:
-    resolution: {integrity: sha512-QHZWYOL325Zo+2K7VBNEJTZ496Kd8Z31p85aQJFldKudUUGBmgw4zu4ghl4CyqPwjRCmqZ9lDdx4FSdMnu4fGg==}
+  /vuelidate/0.7.5:
+    resolution: {integrity: sha512-GAAG8QAFVp7BFeQlNaThpTbimq3+HypBPNwdkCkHZZeVaD5zmXXfhp357dcUJXHXTZjSln0PvP6wiwLZXkFTwg==}
     engines: {node: '>= 4.0.0', npm: '>= 3.0.0'}
     dev: false
 
