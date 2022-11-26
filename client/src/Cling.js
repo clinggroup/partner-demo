@@ -4,7 +4,8 @@ export const config = {
   environment: 'development',
   ui: {
     vars: {
-      '--primary-font': 'ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"',
+      '--primary-font':
+        'ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"',
       '--primary-color-50': '132deg 50% 94%',
       '--primary-color-100': '133deg 60% 87%',
       '--primary-color-200': '137deg 66% 71%',
@@ -24,7 +25,7 @@ export const config = {
       '--gray-color-600': '215deg 14% 34%',
       '--gray-color-700': '217deg 19% 27%',
       '--gray-color-800': '215deg 28% 17%',
-      '--gray-color-900': '221deg 39% 11%',
-    },
-  },
+      '--gray-color-900': '221deg 39% 11%'
+    }
+  }
 }
