@@ -19,7 +19,7 @@ const getAuthToken = async () => {
     headers: { 'Content-Type': 'application/json' },
   }
 
-  const userId = 'user';
+  const userId = 'user1';
   const response = await fetch(`${serverUrl}/auth?userId=${userId}`, requestOptions)
   const { authToken } = await response.json()
 
