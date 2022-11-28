@@ -15,20 +15,12 @@ const getAuthToken = async () => {
 
   // Ask server to match existing or create a new user
   const requestOptions = {
-    method: 'POST',
+    method: 'GET',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      companyUser: {
-        id: 'uniqueUserId',
-        email: 'uniqueUserId@cling.se'
-      },
-      company: {
-        id: 'uniqueCompanyId',
-        name: 'uniqueCompanyId AB'
-      }
-    })
   }
-  const response = await fetch(`${serverUrl}/auth`, requestOptions)
+
+  const userId = 'user';
+  const response = await fetch(`${serverUrl}/auth?userId=${userId}`, requestOptions)
   const { authToken } = await response.json()
 
   return authToken

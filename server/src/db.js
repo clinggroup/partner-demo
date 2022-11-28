@@ -1,27 +1,22 @@
 const userDb = {
-  'u1': {
-    name: 'Sven',
-    email: 'sven@cling.se',
-    companyId: 'c1',
+  'user1': {
+    // name: 'Sven',
+    email: 'widget-demo@cling.se',
+    companyId: 'company1',
   },
-  'u2': {
-    name: 'Peter Petersson',
-    email: 'peter@cling.se',
-    companyId: 'c2',
-  },
-  'u3': {
-    name: 'Pontus Pontusson',
-    email: 'pontus@cling.se',
-    companyId: 'c2',
+  'user2': {
+    // name: 'Peter Petersson',
+    email: 'widget-tester2@cling.se',
+    companyId: 'company2',
   },
 };
 
 const companyDb = {
-  'c1': {
-    name: 'Svea Aktiebolag'
+  'company1': {
+    name: 'Widget Demo AB'
   },
-  'c2': {
-    name: 'P&P Konsulting AB'
+  'company2': {
+    name: 'Widget Tester AB'
   },
 };
 
