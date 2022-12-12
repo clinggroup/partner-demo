@@ -22,7 +22,7 @@ importers:
 
   client:
     specifiers:
-      '@cling-se/widget': ^0.3.2
+      '@cling-se/widget': ^0.4.0
       '@types/react': ^18.0.24
       '@types/react-dom': ^18.0.8
       '@vitejs/plugin-react': ^2.2.0
@@ -33,7 +33,7 @@ importers:
       tailwindcss: ^3.2.2
       vite: ^3.2.3
     dependencies:
-      '@cling-se/widget': 0.3.2
+      '@cling-se/widget': 0.4.0
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -332,8 +332,8 @@ packages:
       '@babel/helper-validator-identifier': 7.19.1
       to-fast-properties: 2.0.0
 
-  /@cling-se/widget/0.3.2:
-    resolution: {integrity: sha512-VHzLHjDd4UUWvk7UNJ6zU0mh9nuDol/OQx5yQ/x1z+OvySwwa68OHgST8LxLnZLufAxC0ny9y87oX0v3NpYx+A==}
+  /@cling-se/widget/0.4.0:
+    resolution: {integrity: sha512-DIbbd2oqywbb4tA/TyrqU9C1Hw9J2HBqw+358DBcKI0UXUdTH5YseH6++X/zkIwj65t5DpyayfX3yGG/MrG/pw==}
     dependencies:
       axios: 0.21.1
       date-fns: 2.14.0
