@@ -254,26 +254,26 @@ function App() {
               Open
             </button>
           </Row>
+          <Row title="Show events timeline">
+            <button
+              className="btn primary"
+              disabled={!fetchedDocument}
+              onClick={() => fetchedDocument.ui.timeline.open()}
+            >
+              Open
+            </button>
+          </Row>
+          <Row title="Show signature reciepts">
+            <button
+              className="btn primary"
+              disabled={!fetchedDocument}
+              onClick={() => fetchedDocument.ui.receipt.open()}
+            >
+              Open
+            </button>
+          </Row>
           <div className="opacity-20">
-            <Row title="Show events timeline">
-              <button
-                className="btn primary"
-                disabled={true}
-                onClick={() => null}
-              >
-                Open
-              </button>
-            </Row>
             <Row title="Show document links">
-              <button
-                className="btn primary"
-                disabled={true}
-                onClick={() => null}
-              >
-                Open
-              </button>
-            </Row>
-            <Row title="Show signature reciepts">
               <button
                 className="btn primary"
                 disabled={true}
