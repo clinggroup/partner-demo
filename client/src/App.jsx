@@ -70,7 +70,7 @@ function App() {
     const myDoc = await Cling.document.new() // Prepare the document form
 
     myDoc.setProperty('data.name', 'My newly created document!') // Set the document name
-    myDoc.addBlock().pdf(pdfInput) // add pdf section
+    await myDoc.addBlock().pdf(pdfInput) // add pdf section
     myDoc.addBlock().answer() // add answer section (accept, deny buttons)
 
     // Register event listener / callback
